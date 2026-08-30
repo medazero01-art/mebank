@@ -3,6 +3,7 @@
 import { useState, useRef } from "react";
 import { RolePlay } from "@/data";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
+import Timer from "@/components/Timer";
 
 export default function Home() {
   const [lang, setLang] = useState("EN");
@@ -494,18 +495,26 @@ export default function Home() {
         {/* MAIN PANEL */}
         <main className="flex-1 overflow-y-auto p-4 md:p-6 bg-transparent select-text relative flex flex-col justify-between">
           <div className="flex-1">
-            {/* BREADCRUMB */}
-            <div className="mb-6 border-b border-white/10 pb-3 flex items-center justify-between">
-              <div className="flex items-center space-x-2 text-xs font-mono tracking-wider text-zinc-500 uppercase">
+            {/* BREADCRUMB & UPPER RIGHT CONTROLS */}
+            <div className="mb-6 border-b border-white/10 pb-3 flex items-center justify-between gap-4">
+              <div className="flex items-center space-x-2 text-xs font-mono tracking-wider text-zinc-500 uppercase flex-wrap">
                 <span className="text-zinc-400 capitalize">{activeDepartment}</span>
                 <span>/</span>
                 <span className="text-zinc-400">{activeCategory}</span>
                 <span>/</span>
                 <span className="text-[#F5C518] font-bold">{activeSubcategory}</span>
+                <span className="text-[10px] text-zinc-600 font-mono uppercase hidden lg:inline ml-2">
+                  • {activeSubcategoryScenes.length} Scene(s)
+                </span>
               </div>
-              <span className="text-[10px] text-zinc-600 font-mono uppercase hidden sm:inline">
-                {activeSubcategoryScenes.length} Scene(s)
-              </span>
+
+              {/* UPPER RIGHT TIMER & SCENE COUNT */}
+              <div className="flex items-center gap-3">
+                <span className="text-[10px] text-zinc-600 font-mono uppercase hidden sm:inline lg:hidden">
+                  {activeSubcategoryScenes.length} Scene(s)
+                </span>
+                <Timer />
+              </div>
             </div>
 
             {/* SCENE LIST */}
