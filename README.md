@@ -1,36 +1,97 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# /me Bank
 
-## Getting Started
+`/me Bank` is a premium, high-fidelity personal roleplay emote library built with **Next.js**, **Tailwind CSS**, and **Framer Motion**. Designed for speed, tactility, and gorgeous visuals, it provides structured collections of copy-on-click roleplay command text templates.
 
-First, run the development server:
+---
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+## 🎨 Visual Identity & Aesthetic
+
+The application features a modern **glassmorphism** design system with rich depth and details:
+- **Base Theme:** Ultra-dark theme (`#0A0A0C`) with layered frosted glass panels (`bg-white/5` and `bg-white/8`, `backdrop-blur-xl`, `border-white/10`).
+- **Tactility:** Subtle SVG fractal noise overlay to create a paper-like grain texture.
+- **Selective Accents:** Amber/yellow (`#F5C518`) used sparingly for highlights, copy success states, active categories, and active tabs.
+- **Ambient Depth:** Slow, heavily-blurred background radial gradient glows reflecting the accent color.
+
+---
+
+## ⚡ Motion & Transitions
+
+All interaction states are animated using **Framer Motion** for a fluid, tactile desktop application experience:
+- **Department & Language Switchers:** Segmented pills slide smoothly between active options using Framer Motion `layoutId` layout animations.
+- **Sidebar Expand/Collapse:** Smooth height animations on category lists with staggered fade-in animations on subcategories.
+- **Main Section Transitions:** Layout changes trigger a 220ms crossfade and subtle vertical slide to keep interactions responsive.
+- **Scene Card Entrances:** Staggered load animation on lists (40ms stagger offset) for clean page presentation.
+- **Copy Feedback:** Quick scale-spring bounce animation on copy buttons morphing into a "Copied!" confirmation.
+- **Accessibility:** Detects and respects system `prefers-reduced-motion` settings, falling back to simple opacity fades.
+
+---
+
+## 📂 Project Structure
+
+```
+├── src
+│   ├── app
+│   │   ├── favicon.ico
+│   │   ├── fonts
+│   │   │   ├── GeistMonoVF.woff
+│   │   │   └── GeistVF.woff
+│   │   ├── globals.css      # Core styles, glassmorphism variables & noise overlay
+│   │   ├── layout.js        # Root HTML shell & custom fonts
+│   │   └── page.js          # Core App Component (Framer Motion logic & UI)
+│   └── data.js              # Nested Roleplay Emote Dataset (EN/FR)
+├── tailwind.config.js       # Custom Tailwind CSS configuration
+├── package.json
+└── README.md
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+## 🗃️ Data Schema
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+Emote structures are completely dynamic and support multi-department categorization. They are defined in `src/data.js` using the following schema:
 
-## Learn More
+```javascript
+export const RolePlay = {
+  EN: {
+    departmentName: {
+      categoryName: {
+        subcategoryName: [
+          {
+            title: "Scene Title",
+            emotes: [
+              "/me walks over to the table...",
+              "/me picks up the folder..."
+            ]
+          }
+        ]
+      }
+    }
+  },
+  FR: {
+    // Equivalent localization mapping
+  }
+};
+```
 
-To learn more about Next.js, take a look at the following resources:
+*To introduce additional departments (e.g. `LTD`, `police`), simply define their categories, subcategories, and scenes under the locale key in `src/data.js`.*
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+---
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+## 🚀 Getting Started
 
-## Deploy on Vercel
+### 1. Install Dependencies
+```bash
+npm install
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### 2. Start the Development Server
+```bash
+npm run dev
+```
+Open [http://localhost:3001](http://localhost:3001) in your browser to inspect the application.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+### 3. Build for Production
+```bash
+npm run build
+```
+The compiled server-side optimized build will output static pages in the `.next` directory.

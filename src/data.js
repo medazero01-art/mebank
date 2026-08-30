@@ -308,6 +308,25 @@ export const RolePlay = {
           }
         ]
       }
+    },
+    GYM: {
+      training: {
+        "lifting weights": [
+          {
+            title: "Weightlifting & Strength Training",
+            emotes: [
+              "/me leans down towards the ground, wraps his fingers around the bar and hoists it off the floor with a controlled grunt",
+              "/me chalks up his palms, rolls his shoulders back once, and settles into position before pulling the weight upward",
+              "/me exhales sharply as he drives the bar off the rack, muscles tensing along his forearms and back",
+              "/me lowers into a slight crouch, grips the weights firmly, and lifts them in one steady motion",
+              "/me plants his feet shoulder-width apart, braces his core, and heaves the weight up with a low grunt",
+              "/me adjusts his grip on the bar, takes a short breath, then presses it upward with visible effort",
+              "/me shakes out his hands briefly before bending down to pick the weights back up, jaw clenched with focus",
+              "/me sets his stance, tightens his grip, and pulls the weight off the rack in a single fluid motion"
+            ]
+          }
+        ]
+      }
     }
   },
   FR: {
@@ -615,6 +634,25 @@ export const RolePlay = {
               "/me tranche le scotch le long du dessus du carton au cutter, repliant les rabats pour vérifier ce qu'il y a dedans.",
               "/me sort les produits neufs un par un et les aligne proprement sur le rayon, les étiquettes tournées vers l'avant.",
               "/me pousse les anciens produits vers l'avant du rayon, faisant de la place derrière pour les nouveaux qu'il vient de déballer."
+            ]
+          }
+        ]
+      }
+    },
+    GYM: {
+      entrainement: {
+        musculation: [
+          {
+            title: "Exercices de Musculation et Haltérophilie",
+            emotes: [
+              "/me se penche vers le sol, enroule ses doigts autour de la barre et la soulève de terre dans un grognement maîtrisé.",
+              "/me se farine les paumes de magnésie, roule les épaules vers l'arrière et se met en position avant de hisser la charge.",
+              "/me expire brusquement en arrachant la barre du rack, les muscles de ses avant-bras et de son dos se tendant sous l'effort.",
+              "/me fléchit légèrement les jambes, saisit fermement les poids et les soulève d'un mouvement régulier et assuré.",
+              "/me écarte les pieds de la largeur des épaules, gaine le tronc et hisse la charge dans un grognement sourd.",
+              "/me ajuste sa prise sur la barre, prend une courte inspiration, puis la développe vers le haut dans un effort visible.",
+              "/me secoue brièvement ses mains avant de se baisser pour reprendre les poids, la mâchoire serrée par la concentration.",
+              "/me prend sa posture, raffermit sa prise et tire la charge hors du rack en un seul mouvement fluide."
             ]
           }
         ]
