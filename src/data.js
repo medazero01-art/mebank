@@ -45,6 +45,22 @@ export const RolePlay = {
             "/me works the bracket bolts loose with a ratchet, pulling the headlight housing forward until the bulb connectors come free in his hand. He slides the cracked unit out from the front fascia, setting it down carefully so the broken lens doesn't shed glass everywhere.",
             "/me plugs the new LED housing in before sliding it onto the guide pins, tightening the brackets until the panel gaps line up clean. He flicks the headlights on, stepping back to check the beam against the wall, nudging the aim screws until the light sits level."
           ]
+        },
+        {
+          title: "Headlight Bulb & Housing Replacement",
+          emotes: [
+            "/me leans deep into the engine bay, fingers tracing the housing until they find the connector, twisting it free with a soft click; the dead bulb comes away blackened at the base, replaced with practiced care, glass never touched, before the cap seats home and the beam flares to life against the wall.",
+            "/me unbolts the cracked housing with slow, deliberate turns, easing it free from the frame and setting it down like something fragile; the new unit slides into place, wiring reconnected strand by strand, until a final twist of the socket locks it tight and the light blinks on, steady and clean."
+          ]
+        }
+      ],
+      "front bumper": [
+        {
+          title: "Cracked Front Bumper Replacement",
+          emotes: [
+            "/me works a flathead beneath each clip, popping them loose one by one along the fender line before gripping the cracked cover with both hands and pulling it forward, feeling the plastic groan and give way, the shattered panel finally coming free and set aside on the garage floor.",
+            "/me lines the fresh bumper cover against the frame, pressing corner to corner until every clip seats with a quiet snap, then crouches to run the last bolts home by hand, tightening each one before standing back to check the fit under the flickering garage light."
+          ]
         }
       ],
       engine: [
@@ -374,6 +390,22 @@ export const RolePlay = {
           emotes: [
             "/me desserre les fixations du support avec un cliquet, tirant le boîtier du phare vers l'avant jusqu'à ce que les connecteurs d'ampoules se détachent dans sa main. Il sort l'unité fissurée de la face avant, la posant avec soin pour éviter de répandre des éclats de verre.",
             "/me branche le nouveau bloc LED avant de le glisser sur les guides, resserrant les fixations jusqu'à ce que les jeux de carrosserie s'alignent parfaitement. Il allume les phares, recule pour vérifier le faisceau contre le mur, ajustant les vis jusqu'à ce que la lumière soit bien droite."
+          ]
+        },
+        {
+          title: "Remplacement d'Ampoule et d'Optique de Phare",
+          emotes: [
+            "/me se penche au fond de la baie moteur, les doigts longeant le bloc optique jusqu'à trouver le connecteur qu'il déclipse d'un tour sec ; l'ampoule grillée vient avec son culot noirci, remplacée avec soin sans jamais toucher le verre, avant que le cache ne se reverrouille et que le faisceau n'éclaire le mur.",
+            "/me dévisse le bloc optique fissuré d'un geste lent et mesuré, le dégageant du châssis pour le poser délicatement ; le bloc neuf prend place, le faisceau est reconnecté fil après fil, jusqu'à ce qu'un dernier tour de douille ne le verrouille et que le phare ne s'allume, net et éclatant."
+          ]
+        }
+      ],
+      "pare-choc avant": [
+        {
+          title: "Remplacement de Pare-choc Avant Fissuré",
+          emotes: [
+            "/me glisse un tournevis plat sous chaque clip, les faisant sauter un à un le long de l'aile avant d'agripper le bouclier fissuré à deux mains et de le tirer vers l'avant, sentant le plastique gémir et céder, le panneau brisé venant enfin se poser sur le sol du garage.",
+            "/me aligne le pare-chocs neuf contre le châssis, pressant de coin en coin jusqu'à ce que chaque clip s'enclenche dans un claquement sourd, puis s'accroupit pour visser les derniers boulons à la main, serrant chacun fermement avant de reculer pour vérifier l'ajustement sous la lumière vacillante du garage."
           ]
         }
       ],
