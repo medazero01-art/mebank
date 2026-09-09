@@ -98,6 +98,14 @@ export const RolePlay = {
             "/me wipes the whole body down with a wax and grease remover, running the cloth in overlapping passes until every panel feels clean under his palm. He tapes off the glass, trim and handles with careful, steady hands, stepping back once to check nothing's been missed.",
             "/me steps into the booth, pulls his mask down and starts laying color across the hood in slow, even passes, the gun humming steady in his hand. He builds the coat layer by layer, finishing with two wet passes of clearcoat that catch the light in a deep, glassy shine."
           ]
+        },
+        {
+          title: "Full Body Wrap",
+          emotes: [
+            "/me thoroughly degreases each body panel with isopropyl alcohol and a microfiber cloth, removing dust and residue. He unclips trim pieces and badges, prepping a spotless, bare surface across the whole vehicle.",
+            "/me rolls out the large vinyl sheet across the vehicle panels, tacking the corners in place. He works a felt squeegee firmly from the center outward in steady passes, chasing out every trapped air pocket.",
+            "/me warms the edges and curves with a heat gun to stretch the wrap smoothly around every contour. He runs a precision blade along panel gaps, trimming the excess cleanly and tucking the edges out of sight."
+          ]
         }
       ],
       "rims paints": [
@@ -443,6 +451,14 @@ export const RolePlay = {
             "/me enroule du papier abrasif neuf autour d'une cale et travaille le capot en longues passes patientes, regardant le vieux vernis se ternir sous sa main. La poussière se dépose sur ses avant-bras tandis qu'il passe de panneau en panneau, essuyant chaque section avant de continuer.",
             "/me essuie toute la carrosserie avec un dégraissant, faisant glisser le chiffon en passes chevauchantes jusqu'à ce que chaque panneau soit propre sous sa paume. Il masque les vitres, les joints et les poignées avec des gestes soigneux, reculant une fois pour vérifier que rien n'a été oublié.",
             "/me entre dans la cabine, baisse son masque et commence à appliquer la teinte sur le capot en passes lentes et régulières, le pistolet ronronnant doucement dans sa main. Il construit la couche petit à petit, terminant par deux passes de vernis qui accrochent la lumière d'un éclat profond."
+          ]
+        },
+        {
+          title: "Pose de Covering Complet (Full Body Wrap)",
+          emotes: [
+            "/me dégraisse méticuleusement chaque panneau à l'alcool isopropylique avec une microfibre, éliminant les moindres impuretés. Il démonte les poignées et baguettes pour assurer une surface de pose impeccable.",
+            "/me déroule le large rouleau de vinyle sur la carrosserie, positionnant le film avec soin. Il passe la raclette en feutrine du centre vers les bords en gestes réguliers pour chasser l'air et éviter les plis.",
+            "/me chauffe les galbes au décapeur thermique pour étirer et plaquer le vinyle sur les courbes. D'une lame de précision, il coupe l'excédent le long des jointures et rentre les bords au millimètre."
           ]
         }
       ],
