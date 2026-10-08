@@ -349,6 +349,30 @@ export const RolePlay = {
               "/me sets his stance, tightens his grip, and pulls the weight off the rack in a single fluid motion"
             ]
           }
+        ],
+        running: [
+          {
+            title: "Treadmill Workout & Cardio Pacing",
+            emotes: [
+              "/me steps onto the treadmill, clips the red safety key to his collar, and taps the digital display to start an easy warm-up pace.",
+              "/me steps onto the running deck, keys in his interval program on the dash, and quickly eases into a steady tempo, his trainers striking the belt in an unbroken rhythm.",
+              "/me punches the speed controls upward, settling into a rhythmic jog as the rubber belt hums steadily beneath his running shoes.",
+              "/me raises the incline by a few degrees, leaning his torso forward and lengthening his stride as sweat begins to bead on his forehead.",
+              "/me wraps both hands around the metal pulse sensors on the handrails, monitoring his heart rate and distance on the glowing dashboard.",
+              "/me taps the cool-down button, letting the belt decelerate to a gentle walk while unhooking a towel from the frame to wipe his face."
+            ]
+          },
+          {
+            title: "High-Intensity Sprints & Interval Training",
+            emotes: [
+              "/me cranks the treadmill speed up to a sprint, pumping his arms hard and digging into the belt with rapid, explosive foot strikes.",
+              "/me drives his knees up high, grimacing with focused effort as his sneakers pound against the running deck in an all-out sprint burst.",
+              "/me drives his pace into a punishing sprint, eyes fixed ahead as his arms pump and sweat flies, holding the cadence before easing onto the side rails.",
+              "/me straddles the side footrails at the end of the interval, panting heavily with hands on his hips as the belt whirs beneath him.",
+              "/me takes slow, deep recovery breaths between sprints, grabbing his water bottle to take a few measured sips before the next set.",
+              "/me pulls the emergency safety tether, stepping off the stopped machine to stretch out his tight hamstrings and calf muscles."
+            ]
+          }
         ]
       }
     }
@@ -701,6 +725,30 @@ export const RolePlay = {
               "/me ajuste sa prise sur la barre, prend une courte inspiration, puis la développe vers le haut dans un effort visible.",
               "/me secoue brièvement ses mains avant de se baisser pour reprendre les poids, la mâchoire serrée par la concentration.",
               "/me prend sa posture, raffermit sa prise et tire la charge hors du rack en un seul mouvement fluide."
+            ]
+          }
+        ],
+        running: [
+          {
+            title: "Entraînement sur Tapis & Cardio",
+            emotes: [
+              "/me monte sur le tapis roulant, accroche le cordon de sécurité à son col et appuie sur l'écran digital pour lancer un échauffement à allure douce.",
+              "/me monte sur la bande de course, sélectionne son programme sur la console et cale aussitôt son rythme, ses baskets frappant le tapis dans une cadence fluide.",
+              "/me augmente progressivement la cadence sur la console, trouvant un rythme de course régulier tandis que la bande déroule sous ses semelles.",
+              "/me règle l'inclinaison à quelques degrés de plus, penchant le torse en avant et allongeant sa foulée alors que la sueur perle sur son front.",
+              "/me pose un instant les mains sur les capteurs métalliques des poignées, vérifiant sa fréquence cardiaque et la distance sur le tableau de bord.",
+              "/me appuie sur la touche de récupération, laissant le tapis décélérer en une marche lente tout en attrapant sa serviette pour s'essuyer le visage."
+            ]
+          },
+          {
+            title: "Sprints & Entraînement Fractionné",
+            emotes: [
+              "/me pousse la vitesse au maximum, balançant énergiquement les bras et martelant le tapis de foulées explosives et ultra-rapides.",
+              "/me monte les genoux avec vigueur, le visage crispé par l'effort intense alors que ses baskets frappent la bande dans un sprint effréné.",
+              "/me lance son allure dans un sprint soutenu, le regard droit devant et les bras battant la mesure avant de se caler sur les rails latéraux dans un souffle rauque.",
+              "/me saute sur les repose-pieds latéraux à la fin de la série, les mains sur les hanches et la poitrine haletante pendant que la bande tourne à vide.",
+              "/me prend de profondes respirations pour faire redescendre son rythme cardiaque, buvant quelques gorgées d'eau fraîche avant la série suivante.",
+              "/me décroche le cordon d'arrêt d'urgence, descendant de l'appareil arrêté pour étirer longuement ses mollets et ses ischios-jambiers."
             ]
           }
         ]
