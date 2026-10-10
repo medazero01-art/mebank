@@ -1,6 +1,7 @@
+/* eslint-disable @next/next/no-img-element */
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { RolePlay } from "@/data";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import Timer from "@/components/Timer";
@@ -12,9 +13,21 @@ export default function Home() {
   const [activeSubcategory, setActiveSubcategory] = useState("glass");
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [copiedKey, setCopiedKey] = useState(null);
+  const [selectedChart, setSelectedChart] = useState(null);
   
   // Hook to detect prefers-reduced-motion
   const shouldReduceMotion = useReducedMotion();
+
+  // Close chart modal on Escape
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === "Escape") {
+        setSelectedChart(null);
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, []);
 
   // Track active timeout to clear it if another button is clicked
   const timeoutRef = useRef(null);
@@ -562,63 +575,167 @@ export default function Home() {
                       <h2 className="text-sm font-semibold text-zinc-200 tracking-tight">
                         {scene.title}
                       </h2>
-                      <span className="text-[10px] font-mono bg-black/40 text-zinc-500 px-2 py-0.5 rounded border border-white/10">
-                        {scene.emotes.length} emotes
-                      </span>
+                      <div className="flex items-center gap-1.5 text-[10px] font-mono bg-black/40 text-zinc-400 px-2 py-0.5 rounded border border-white/10">
+                        {scene.charts && (
+                          <span className="text-[#F5C518] font-semibold">
+                            {scene.charts.length} chart{scene.charts.length !== 1 ? "s" : ""}
+                          </span>
+                        )}
+                        {scene.charts && scene.emotes && scene.emotes.length > 0 && (
+                          <span className="text-zinc-600">•</span>
+                        )}
+                        {scene.emotes && scene.emotes.length > 0 && (
+                          <span>{scene.emotes.length} emotes</span>
+                        )}
+                        {!scene.charts && (!scene.emotes || scene.emotes.length === 0) && (
+                          <span>0 items</span>
+                        )}
+                      </div>
                     </div>
 
                     {/* Emote Entries */}
-                    <div className="divide-y divide-white/5 relative z-10">
-                      {scene.emotes.map((emote, emoteIndex) => {
-                        const uniqueKey = `${sceneIndex}-${emoteIndex}`;
-                        const isCopied = copiedKey === uniqueKey;
+                    {scene.emotes && scene.emotes.length > 0 && (
+                      <div className="divide-y divide-white/5 relative z-10">
+                        {scene.emotes.map((emote, emoteIndex) => {
+                          const uniqueKey = `${sceneIndex}-${emoteIndex}`;
+                          const isCopied = copiedKey === uniqueKey;
 
-                        return (
-                          <div
-                            key={emoteIndex}
-                            className="px-4 py-3.5 flex items-center justify-between gap-4 hover:bg-white/[0.02] group transition-colors duration-150"
-                          >
-                            {/* Emote Monospace Text */}
-                            <div className="font-mono text-xs text-zinc-300 select-all break-words leading-relaxed flex-1">
-                              {emote}
-                            </div>
-
-                            {/* Copy Button */}
-                            <button
-                              onClick={() => handleCopy(emote, uniqueKey)}
-                              className={`relative overflow-hidden flex-shrink-0 px-3.5 py-1.5 text-[10px] font-mono uppercase font-bold rounded-md border transition-all duration-150 ${
-                                isCopied
-                                  ? "bg-[#F5C518] text-black border-[#F5C518]"
-                                  : "bg-white/5 text-zinc-400 border-white/10 hover:bg-[#F5C518] hover:text-black hover:border-[#F5C518]"
-                              }`}
+                          return (
+                            <div
+                              key={emoteIndex}
+                              className="px-4 py-3.5 flex items-center justify-between gap-4 hover:bg-white/[0.02] group transition-colors duration-150"
                             >
-                              <AnimatePresence mode="wait">
-                                <motion.span
-                                  key={isCopied ? "copied" : "copy"}
-                                  initial={{ 
-                                    scale: shouldReduceMotion ? 1 : 0.8, 
-                                    opacity: 0 
-                                  }}
-                                  animate={{ scale: 1, opacity: 1 }}
-                                  exit={{ 
-                                    scale: shouldReduceMotion ? 1 : 0.8, 
-                                    opacity: 0 
-                                  }}
-                                  transition={{ 
-                                    type: "spring", 
-                                    stiffness: 400, 
-                                    damping: 18 
-                                  }}
-                                  className="block"
-                                >
-                                  {isCopied ? "Copied!" : "Copy"}
-                                </motion.span>
-                              </AnimatePresence>
-                            </button>
+                              {/* Emote Monospace Text */}
+                              <div className="font-mono text-xs text-zinc-300 select-all break-words leading-relaxed flex-1">
+                                {emote}
+                              </div>
+
+                              {/* Copy Button */}
+                              <button
+                                onClick={() => handleCopy(emote, uniqueKey)}
+                                className={`relative overflow-hidden flex-shrink-0 px-3.5 py-1.5 text-[10px] font-mono uppercase font-bold rounded-md border transition-all duration-150 ${
+                                  isCopied
+                                    ? "bg-[#F5C518] text-black border-[#F5C518]"
+                                    : "bg-white/5 text-zinc-400 border-white/10 hover:bg-[#F5C518] hover:text-black hover:border-[#F5C518]"
+                                }`}
+                              >
+                                <AnimatePresence mode="wait">
+                                  <motion.span
+                                    key={isCopied ? "copied" : "copy"}
+                                    initial={{ 
+                                      scale: shouldReduceMotion ? 1 : 0.8, 
+                                      opacity: 0 
+                                    }}
+                                    animate={{ scale: 1, opacity: 1 }}
+                                    exit={{ 
+                                      scale: shouldReduceMotion ? 1 : 0.8, 
+                                      opacity: 0 
+                                    }}
+                                    transition={{ 
+                                      type: "spring", 
+                                      stiffness: 400, 
+                                      damping: 18 
+                                    }}
+                                    className="block"
+                                  >
+                                    {isCopied ? "Copied!" : "Copy"}
+                                  </motion.span>
+                                </AnimatePresence>
+                              </button>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    )}
+
+                    {/* Chart Entries */}
+                    {scene.charts && (
+                      <div className="p-4 relative z-10">
+                        {scene.charts.length > 0 ? (
+                          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                            {scene.charts.map((chart, chartIndex) => (
+                              <div
+                                key={chartIndex}
+                                onClick={() => setSelectedChart(chart)}
+                                className="group relative cursor-pointer overflow-hidden rounded-lg border border-white/10 bg-black/40 hover:border-[#F5C518]/60 transition-all duration-200 flex flex-col"
+                              >
+                                {/* Chart Card Header */}
+                                <div className="p-3 border-b border-white/10 bg-white/[0.02] flex items-center justify-between gap-2">
+                                  <span className="text-xs font-semibold text-zinc-200 truncate group-hover:text-[#F5C518] transition-colors">
+                                    {chart.title}
+                                  </span>
+                                  <span className="text-[9px] font-mono uppercase px-1.5 py-0.5 rounded bg-white/5 text-zinc-400 group-hover:bg-[#F5C518] group-hover:text-black transition-colors shrink-0">
+                                    View
+                                  </span>
+                                </div>
+
+                                {/* Chart Card Image / Placeholder Area */}
+                                <div className="relative aspect-[4/3] w-full bg-zinc-950/80 flex flex-col items-center justify-center p-4 overflow-hidden">
+                                  <div 
+                                    className="absolute inset-0 opacity-15 pointer-events-none"
+                                    style={{
+                                      backgroundImage: `radial-gradient(circle at 1px 1px, rgba(255,255,255,0.2) 1px, transparent 0)`,
+                                      backgroundSize: "16px 16px"
+                                    }}
+                                  />
+
+                                  {chart.imagePath || chart.image ? (
+                                    <img
+                                      src={chart.imagePath || chart.image}
+                                      alt={chart.title}
+                                      onError={(e) => {
+                                        e.currentTarget.style.display = "none";
+                                        if (e.currentTarget.nextElementSibling) {
+                                          e.currentTarget.nextElementSibling.style.display = "flex";
+                                        }
+                                      }}
+                                      className="w-full h-full object-contain relative z-10"
+                                    />
+                                  ) : null}
+
+                                  {/* Placeholder fallback if image fails to load or not provided yet */}
+                                  <div 
+                                    className={`flex flex-col items-center justify-center text-center p-4 relative z-0 ${
+                                      chart.imagePath || chart.image ? "hidden" : "flex"
+                                    }`}
+                                  >
+                                    <div className="w-12 h-12 rounded-full border border-dashed border-[#F5C518]/40 flex items-center justify-center mb-2.5 text-[#F5C518] bg-[#F5C518]/5 group-hover:scale-110 transition-transform">
+                                      <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" />
+                                      </svg>
+                                    </div>
+                                    <span className="text-[11px] font-mono text-zinc-300 font-semibold mb-1">
+                                      Airport Chart Slot
+                                    </span>
+                                    <span className="text-[9px] font-mono text-zinc-500 bg-white/5 px-2 py-0.5 rounded border border-white/5 truncate max-w-full">
+                                      {chart.imagePath || chart.image || "No path set"}
+                                    </span>
+                                    <span className="text-[9px] text-zinc-500 mt-2 italic">
+                                      Drop chart into public{chart.imagePath || chart.image || "/charts/..."}
+                                    </span>
+                                  </div>
+                                </div>
+                              </div>
+                            ))}
                           </div>
-                        );
-                      })}
-                    </div>
+                        ) : (
+                          /* Empty charts array placeholder */
+                          <div className="border border-dashed border-white/10 rounded-xl p-8 text-center bg-white/[0.01]">
+                            <div className="w-10 h-10 rounded-full border border-dashed border-white/20 mx-auto flex items-center justify-center text-zinc-500 mb-2">
+                              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" />
+                              </svg>
+                            </div>
+                            <span className="text-xs text-zinc-400 font-mono block font-semibold">
+                              No Airport Charts Added Yet
+                            </span>
+                            <span className="text-[10px] text-zinc-600 font-mono block mt-1">
+                              Add charts with &#123; title, imagePath &#125; in src/data.js
+                            </span>
+                          </div>
+                        )}
+                      </div>
+                    )}
                   </motion.div>
                 ))}
 
@@ -669,6 +786,91 @@ export default function Home() {
           </footer>
         </main>
       </div>
+
+      {/* LIGHTBOX MODAL FOR CHARTS */}
+      <AnimatePresence>
+        {selectedChart && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setSelectedChart(null)}
+            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md"
+          >
+            <motion.div
+              initial={{ scale: 0.95, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.95, opacity: 0 }}
+              onClick={(e) => e.stopPropagation()}
+              className="glass-card max-w-4xl w-full max-h-[90vh] rounded-2xl overflow-hidden flex flex-col border border-white/20 shadow-2xl"
+            >
+              {/* Modal Header */}
+              <div className="p-4 bg-white/[0.03] border-b border-white/10 flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <span className="text-xs font-mono text-[#F5C518] font-bold">CHART</span>
+                  <span className="text-zinc-600">•</span>
+                  <h3 className="text-sm font-semibold text-white truncate">
+                    {selectedChart.title}
+                  </h3>
+                </div>
+                <button
+                  onClick={() => setSelectedChart(null)}
+                  className="p-1.5 rounded-lg bg-white/5 hover:bg-white/10 text-zinc-400 hover:text-white transition-colors"
+                >
+                  <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
+
+              {/* Modal Image Body */}
+              <div className="flex-1 p-4 overflow-auto flex items-center justify-center bg-zinc-950/90 min-h-[350px]">
+                {selectedChart.imagePath || selectedChart.image ? (
+                  <img
+                    src={selectedChart.imagePath || selectedChart.image}
+                    alt={selectedChart.title}
+                    onError={(e) => {
+                      e.currentTarget.style.display = "none";
+                      if (e.currentTarget.nextElementSibling) {
+                        e.currentTarget.nextElementSibling.style.display = "flex";
+                      }
+                    }}
+                    className="max-h-[70vh] max-w-full object-contain rounded"
+                  />
+                ) : null}
+
+                <div className={`flex flex-col items-center justify-center text-center p-8 ${
+                  selectedChart.imagePath || selectedChart.image ? "hidden" : "flex"
+                }`}>
+                  <div className="w-16 h-16 rounded-full border border-dashed border-[#F5C518]/40 flex items-center justify-center mb-3 text-[#F5C518] bg-[#F5C518]/5">
+                    <svg className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" />
+                    </svg>
+                  </div>
+                  <h4 className="text-base font-semibold text-white mb-1">{selectedChart.title}</h4>
+                  <p className="text-xs font-mono text-zinc-400 mb-3">
+                    Configured path: <span className="text-[#F5C518]">{selectedChart.imagePath || selectedChart.image || "None"}</span>
+                  </p>
+                  <p className="text-xs text-zinc-500 max-w-md">
+                    Place the chart image file inside the <code className="text-zinc-300 bg-white/5 px-1 py-0.5 rounded">public{selectedChart.imagePath || "/charts/..."}</code> directory to display it here.
+                  </p>
+                </div>
+              </div>
+
+              {/* Modal Footer */}
+              <div className="p-3 bg-white/[0.02] border-t border-white/10 flex items-center justify-between text-[11px] text-zinc-500 font-mono">
+                <span>San Andreas Airport Chart Viewer</span>
+                <button
+                  onClick={() => setSelectedChart(null)}
+                  className="px-3 py-1 rounded bg-[#F5C518] text-black font-bold text-xs"
+                >
+                  Close
+                </button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

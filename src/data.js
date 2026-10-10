@@ -375,6 +375,228 @@ export const RolePlay = {
           }
         ]
       }
+    },
+    PILOT: {
+      "PRE-FLIGHT": {
+        elevators: [
+          {
+            title: "Elevators Inspection",
+            emotes: [
+              "/me walks to the tail and rests a hand on the horizontal stabilizer, then pushes the elevator up and down, feeling for stiffness or play in the hinges while his eyes sweep along the trailing edge, looking for anything wedged in the gap that could stop it from moving freely.",
+              "/me crouches under the stabilizer to check the elevator trim tab and the mounting hardware, looking for cracks, loose bolts or bent metal, then gives the surface one last gentle wiggle to make sure everything is solid and nothing is obstructing it."
+            ]
+          }
+        ],
+        rudder: [
+          {
+            title: "Rudder Inspection",
+            emotes: [
+              "/me steps up to the vertical stabilizer and nudges the rudder to the left, then to the right, watching its full sweep and listening for any scrape or catch, while his free hand follows the hinge line to feel for looseness or play.",
+              "/me looks over the rudder's surface for dents, cracks or bent edges, checks that nothing is jammed in the gap behind it, then lets it settle back to neutral, satisfied that it moves freely."
+            ]
+          }
+        ],
+        "left side": [
+          {
+            title: "Left Side (Fuselage, Wing, Main Gear)",
+            emotes: [
+              "/me walks along the left side of the fuselage, scanning the skin for cracks, loose screws or bent panels. Dirt and a few superficial scratches earn a shrug, only real damage would keep him from flying today.",
+              "/me runs his palm along the left wing's leading edge, then crouches by the main landing gear to inspect the strut, the tire and the bolts for cracks, loose fasteners or anything that looks bent or out of place."
+            ]
+          }
+        ],
+        ailerons: [
+          {
+            title: "Ailerons Inspection",
+            emotes: [
+              "/me reaches the left wingtip and pushes the aileron up, then down, feeling the resistance through his fingers and checking that it travels freely, with nothing blocking the hinge or the gap along the wing's trailing edge."
+            ]
+          }
+        ],
+        exhausts: [
+          {
+            title: "Exhausts (Left & Right)",
+            emotes: [
+              "/me bends down beside the engine cowling and peers into the exhaust on the left side, then on the right, making sure nothing is blocking either pipe: no debris, no cloth, no nest, nothing that could choke the engine on startup."
+            ]
+          }
+        ],
+        "propeller & front gear": [
+          {
+            title: "Propeller & Front Landing Gear",
+            emotes: [
+              "/me stops at the nose and inspects the propeller blade by blade, looking for nicks, cracks or bent tips, then turns it carefully by hand to confirm it spins freely and that nothing is caught in its path.",
+              "/me crouches by the nose gear, checking the strut, the wheel and the fasteners for cracks, loose bolts or bent parts, then stands back up and wipes his hands clean, satisfied with the front of the aircraft."
+            ]
+          }
+        ],
+        "right side": [
+          {
+            title: "Right Side (Fuselage, Wing, Aileron, Main Gear)",
+            emotes: [
+              "/me circles to the right side of the aircraft and sweeps the fuselage with his eyes, looking for cracks, loose screws or bent panels, accepting the dirt and light scratches as part of an aircraft that actually flies.",
+              "/me checks the right wing from root to tip, pushes the aileron up and down to feel it move freely, then crouches at the main landing gear to inspect the strut, the tire and the bolts for any sign of damage."
+            ]
+          }
+        ],
+        "radio antennas": [
+          {
+            title: "Radio Antennas",
+            emotes: [
+              "/me tilts his head back to inspect the radio antennas on top of the aircraft, making sure none of them is bent, cracked or snapped off, since a damaged antenna could leave him deaf on the frequency."
+            ]
+          }
+        ],
+        "beacon & lights": [
+          {
+            title: "Beacon & Strobe/Navigation Lights",
+            emotes: [
+              "/me leans into the cockpit and flips the Battery Master Switch on, then toggles the beacon, the strobes and the navigation lights one by one, stepping back each time to check that every light actually comes on.",
+              "/me walks around the aircraft to confirm the beacon, strobes and nav lights are intact and working, then returns to the cockpit and switches the Battery Master Switch back off, ending the walkaround."
+            ]
+          }
+        ]
+      },
+      ATC: {
+        clearance: [
+          {
+            title: "ATC (San Andreas Center)",
+            emotes: [
+              "/atc San Andreas Center. N123AB. At Devin Weston Apron at Los Santos International Airport. Request VFR clearance to Sandy Shores Airfield at 1,500ft."
+            ]
+          }
+        ],
+        pushback: [
+          {
+            title: "ATC OFFLINE (CTAF)",
+            emotes: [
+              "/atc Los Santos Traffic. N123AB. At Gate 8. Pushing back to face west. Los Santos."
+            ]
+          },
+          {
+            title: "ATC (San Andreas Center)",
+            emotes: [
+              "/atc San Andreas Center. N123AB. At Gate 8 at Los Santos International Airport. Request pushback."
+            ]
+          }
+        ],
+        taxi: [
+          {
+            title: "ATC OFFLINE (CTAF)",
+            emotes: [
+              "/atc Los Santos Traffic. N123AB. At IMEX Hangar. Taxiing to Runway 30L via Bravo, Bravo 1. Los Santos."
+            ]
+          },
+          {
+            title: "ATC (San Andreas Center)",
+            emotes: [
+              "/atc San Andreas Center. N123AB. At IMEX Hangar at Los Santos International Airport. Ready to taxi."
+            ]
+          }
+        ],
+        takeoff: [
+          {
+            title: "ATC OFFLINE (CTAF)",
+            emotes: [
+              "/atc Los Santos Traffic. N123AB. Entering Runway 2-1 for departure. Departing to the north. Climbing and maintaining 2,000ft. Los Santos.",
+              "/atc Los Santos Traffic. N123AB. Entering Runway 2-1 for departure. Remaining in the left traffic pattern. Los Santos."
+            ]
+          },
+          {
+            title: "ATC (San Andreas Center)",
+            emotes: [
+              "/atc San Andreas Center. N123AB. Holding short of C1 for Runway 2-1. Ready for departure."
+            ]
+          }
+        ],
+        "position update": [
+          {
+            title: "ATC OFFLINE (CTAF)",
+            emotes: [
+              "/atc San Andreas Traffic. N123AB. Passing over Paleto Bay at 3,000ft. Turning southeast, following Senora Freeway to Sandy Shores. San Andreas."
+            ]
+          }
+        ],
+        "pattern entry": [
+          {
+            title: "ATC OFFLINE (CTAF)",
+            emotes: [
+              "/atc Sandy Shores Traffic. N123AB. Inbound from the west over Zancudo River at 3,000ft. Descending to 1,000ft and joining right downwind for Runway 2-5. Sandy Shores."
+            ]
+          }
+        ],
+        descent: [
+          {
+            title: "ATC (San Andreas Center)",
+            emotes: [
+              "/atc San Andreas Center. N123AB. Passing Zancudo River at 3,500ft. Requesting descent to 1,500ft."
+            ]
+          }
+        ],
+        landing: [
+          {
+            title: "ATC OFFLINE (CTAF)",
+            emotes: [
+              "/atc Sandy Shores Traffic. N123AB. On final for Runway 2-5. Full stop. Sandy Shores.",
+              "/atc Sandy Shores Traffic. N123AB. On final for Runway 2-5. Touch and go, remaining in the pattern. Sandy Shores."
+            ]
+          },
+          {
+            title: "ATC (San Andreas Center)",
+            emotes: [
+              "/atc San Andreas Center. N123AB. On final for Runway 2-5. Full stop."
+            ]
+          }
+        ],
+        "pan-pan": [
+          {
+            title: "ATC OFFLINE (CTAF)",
+            emotes: [
+              "/atc Pan-Pan, Pan-Pan, Pan-Pan. Sandy Shores Traffic. N123AB. We have a stuck landing gear. Inbound over Chumash at 1,500ft. Descending now to 1,000ft and joining right downwind for Runway 2-5. Sandy Shores."
+            ]
+          },
+          {
+            title: "ATC (San Andreas Center)",
+            emotes: [
+              "/atc Pan-Pan, Pan-Pan, Pan-Pan. San Andreas Center. N123AB. We have a sick passenger. Passing Chumash at 2,500ft. Request priority vectors to Los Santos International Airport."
+            ]
+          }
+        ],
+        mayday: [
+          {
+            title: "ATC OFFLINE (CTAF)",
+            emotes: [
+              "/atc Mayday, Mayday, Mayday. McKenzie Traffic. N123AB. Fire on board. Passing Catfish Islands at 2,500ft. Executing an emergency landing on Runway 2-4. McKenzie."
+            ]
+          },
+          {
+            title: "ATC (San Andreas Center)",
+            emotes: [
+              "/atc Mayday, Mayday, Mayday. San Andreas Center. N123AB. Total engine failure. Passing Paleto Bay at 2,500ft. Executing an emergency landing on Senora Freeway."
+            ]
+          }
+        ],
+        "airport charts": [
+          {
+            title: "San Andreas Airport Charts",
+            charts: [
+              {
+                title: "Los Santos International Airport (LSIA)",
+                imagePath: "/charts/lsia.png"
+              },
+              {
+                title: "Sandy Shores Airfield",
+                imagePath: "/charts/sandy_shores.png"
+              },
+              {
+                title: "McKenzie Field",
+                imagePath: "/charts/mckenzie.png"
+              }
+            ],
+            emotes: []
+          }
+        ]
+      }
     }
   },
   FR: {
@@ -750,6 +972,228 @@ export const RolePlay = {
               "/me prend de profondes respirations pour faire redescendre son rythme cardiaque, buvant quelques gorgées d'eau fraîche avant la série suivante.",
               "/me décroche le cordon d'arrêt d'urgence, descendant de l'appareil arrêté pour étirer longuement ses mollets et ses ischios-jambiers."
             ]
+          }
+        ]
+      }
+    },
+    PILOT: {
+      "PRE-FLIGHT": {
+        elevators: [
+          {
+            title: "Vérification de la Gouverne de Profondeur",
+            emotes: [
+              "/me s'avance vers l'empennage et pose une main sur le stabilisateur horizontal, puis pousse la gouverne de profondeur de haut en bas, jaugeant la résistance ou le jeu dans les charnières tout en balayant le bord de fuite du regard, s'assurant que rien n'est coincé dans l'interstice qui pourrait entraver son mouvement.",
+              "/me s'accroupit sous le stabilisateur pour contrôler le compensateur de profondeur et les fixations, cherchant la moindre fissure, vis desserrée ou métal déformé, puis donne une dernière secousse délicate à la surface pour s'assurer que l'ensemble est solide et parfaitement libre."
+            ]
+          }
+        ],
+        rudder: [
+          {
+            title: "Vérification de la Gouverne de Direction",
+            emotes: [
+              "/me s'approche du plan fixe vertical et pousse la gouverne de direction vers la gauche, puis vers la droite, observant son débattement complet et tendant l'oreille au moindre frottement suspect, tandis que sa main libre suit la ligne de charnière pour déceler tout jeu anormal.",
+              "/me inspecte la surface de la gouverne à la recherche d'enfoncements, fissures ou bords tordus, vérifie que rien n'est coincé dans l'espace arrière, puis la laisse revenir au neutre, satisfait de sa fluidité de mouvement."
+            ]
+          }
+        ],
+        "left side": [
+          {
+            title: "Flanc Gauche (Fuselage, Aile, Train Principal)",
+            emotes: [
+              "/me longe le flanc gauche du fuselage, inspectant la tôle à la recherche de fissures, vis desserrées ou panneaux voilés, ignorant la poussière et les micro-rayures superficielles qui ne sauraient l'empêcher de voler aujourd'hui.",
+              "/me fait glisser sa paume le long du bord d'attaque de l'aile gauche, puis s'accroupit près du train principal pour examiner la jambe, le pneumatique et la boulonnerie à l'affût de criques, fixations lâches ou éléments déformés."
+            ]
+          }
+        ],
+        ailerons: [
+          {
+            title: "Vérification des Ailerons",
+            emotes: [
+              "/me atteint le saumon de l'aile gauche et actionne l'aileron vers le haut, puis vers le bas, sentant la résistance du bout des doigts et vérifiant qu'il se déplace librement sans aucune entrave le long du bord de fuite."
+            ]
+          }
+        ],
+        exhausts: [
+          {
+            title: "Inspection des Échappements (Gauche & Droit)",
+            emotes: [
+              "/me se penche le long du capot moteur et jette un œil attentif à l'intérieur de la tubulure d'échappement gauche, puis droite, s'assurant qu'aucun débris, chiffon ou nid ne vient boucher les conduits et risquer d'étouffer le moteur au démarrage."
+            ]
+          }
+        ],
+        "propeller & front gear": [
+          {
+            title: "Hélice et Train Avant",
+            emotes: [
+              "/me s'arrête devant le nez de l'appareil et inspecte l'hélice pale par pale, traquant le moindre éclat, fissure ou bord voilé, puis la fait tourner prudemment à la main pour vérifier qu'elle tourne librement et que rien ne se trouve sur sa trajectoire.",
+              "/me s'accroupit près du train avant, vérifiant l'amortisseur, la roue et les fixations à la recherche de fissures ou de boulons desserrés, puis se redresse en s'essuyant les mains, pleinement satisfait de l'avant de l'appareil."
+            ]
+          }
+        ],
+        "right side": [
+          {
+            title: "Flanc Droit (Fuselage, Aile, Aileron, Train)",
+            emotes: [
+              "/me contourne l'appareil vers le flanc droit et balaye le fuselage du regard, cherchant d'éventuelles fissures ou panneaux tordus, acceptant la saleté et les légères éraflures propres à un avion qui vole régulièrement.",
+              "/me inspecte l'aile droite de l'emplanture jusqu'au saumon, manœuvre l'aileron de haut en bas pour confirmer son débattement, puis s'accroupit devant le train principal pour vérifier la jambe, le pneu et la boulonnerie."
+            ]
+          }
+        ],
+        "radio antennas": [
+          {
+            title: "Antennes Radio",
+            emotes: [
+              "/me lève la tête pour inspecter les antennes radio situées sur le dos de l'appareil, vérifiant qu'aucune n'est courbée, fêlée ou cassée, ce qui pourrait lui faire perdre tout contact radio en vol."
+            ]
+          }
+        ],
+        "beacon & lights": [
+          {
+            title: "Feu à Éclat (Beacon), Strobes & Feux de Navigation",
+            emotes: [
+              "/me se penche dans le cockpit et bascule l'interrupteur général de batterie sur 'ON', puis allume le feu à éclat (beacon), les strobes et les feux de navigation un par un, reculant à chaque fois pour vérifier que chaque feu s'allume bien.",
+              "/me fait le tour de l'avion pour s'assurer du bon fonctionnement de tous les feux de signalisation et de navigation, puis regagne le cockpit pour couper la batterie, achevant ainsi la visite pré-vol."
+            ]
+          }
+        ]
+      },
+      ATC: {
+        clearance: [
+          {
+            title: "ATC (San Andreas Center)",
+            emotes: [
+              "/atc San Andreas Center. N123AB. At Devin Weston Apron at Los Santos International Airport. Request VFR clearance to Sandy Shores Airfield at 1,500ft."
+            ]
+          }
+        ],
+        pushback: [
+          {
+            title: "ATC OFFLINE (CTAF)",
+            emotes: [
+              "/atc Los Santos Traffic. N123AB. At Gate 8. Pushing back to face west. Los Santos."
+            ]
+          },
+          {
+            title: "ATC (San Andreas Center)",
+            emotes: [
+              "/atc San Andreas Center. N123AB. At Gate 8 at Los Santos International Airport. Request pushback."
+            ]
+          }
+        ],
+        taxi: [
+          {
+            title: "ATC OFFLINE (CTAF)",
+            emotes: [
+              "/atc Los Santos Traffic. N123AB. At Devin Weston Apron. Taxiing to Runway 2-1 via A and C. Los Santos."
+            ]
+          },
+          {
+            title: "ATC (San Andreas Center)",
+            emotes: [
+              "/atc San Andreas Center. N123AB. At Devin Weston Apron at Los Santos International Airport. Ready to taxi."
+            ]
+          }
+        ],
+        takeoff: [
+          {
+            title: "ATC OFFLINE (CTAF)",
+            emotes: [
+              "/atc Los Santos Traffic. N123AB. Entering Runway 2-1 for departure. Departing to the north. Climbing and maintaining 2,000ft. Los Santos.",
+              "/atc Los Santos Traffic. N123AB. Entering Runway 2-1 for departure. Remaining in the left traffic pattern. Los Santos."
+            ]
+          },
+          {
+            title: "ATC (San Andreas Center)",
+            emotes: [
+              "/atc San Andreas Center. N123AB. Holding short of C1 for Runway 2-1. Ready for departure."
+            ]
+          }
+        ],
+        "position update": [
+          {
+            title: "ATC OFFLINE (CTAF)",
+            emotes: [
+              "/atc San Andreas Traffic. N123AB. Passing over Paleto Bay at 3,000ft. Turning southeast, following Senora Freeway to Sandy Shores. San Andreas."
+            ]
+          }
+        ],
+        "pattern entry": [
+          {
+            title: "ATC OFFLINE (CTAF)",
+            emotes: [
+              "/atc Sandy Shores Traffic. N123AB. Inbound from the west over Zancudo River at 3,000ft. Descending to 1,000ft and joining right downwind for Runway 2-5. Sandy Shores."
+            ]
+          }
+        ],
+        descent: [
+          {
+            title: "ATC (San Andreas Center)",
+            emotes: [
+              "/atc San Andreas Center. N123AB. Passing Zancudo River at 3,500ft. Requesting descent to 1,500ft."
+            ]
+          }
+        ],
+        landing: [
+          {
+            title: "ATC OFFLINE (CTAF)",
+            emotes: [
+              "/atc Sandy Shores Traffic. N123AB. On final for Runway 2-5. Full stop. Sandy Shores.",
+              "/atc Sandy Shores Traffic. N123AB. On final for Runway 2-5. Touch and go, remaining in the pattern. Sandy Shores."
+            ]
+          },
+          {
+            title: "ATC (San Andreas Center)",
+            emotes: [
+              "/atc San Andreas Center. N123AB. On final for Runway 2-5. Full stop."
+            ]
+          }
+        ],
+        "pan-pan": [
+          {
+            title: "ATC OFFLINE (CTAF)",
+            emotes: [
+              "/atc Pan-Pan, Pan-Pan, Pan-Pan. Sandy Shores Traffic. N123AB. We have a stuck landing gear. Inbound over Chumash at 1,500ft. Descending now to 1,000ft and joining right downwind for Runway 2-5. Sandy Shores."
+            ]
+          },
+          {
+            title: "ATC (San Andreas Center)",
+            emotes: [
+              "/atc Pan-Pan, Pan-Pan, Pan-Pan. San Andreas Center. N123AB. We have a sick passenger. Passing Chumash at 2,500ft. Request priority vectors to Los Santos International Airport."
+            ]
+          }
+        ],
+        mayday: [
+          {
+            title: "ATC OFFLINE (CTAF)",
+            emotes: [
+              "/atc Mayday, Mayday, Mayday. McKenzie Traffic. N123AB. Fire on board. Passing Catfish Islands at 2,500ft. Executing an emergency landing on Runway 2-4. McKenzie."
+            ]
+          },
+          {
+            title: "ATC (San Andreas Center)",
+            emotes: [
+              "/atc Mayday, Mayday, Mayday. San Andreas Center. N123AB. Total engine failure. Passing Paleto Bay at 2,500ft. Executing an emergency landing on Senora Freeway."
+            ]
+          }
+        ],
+        "airport charts": [
+          {
+            title: "Cartes d'Aérodrome de San Andreas",
+            charts: [
+              {
+                title: "Los Santos International Airport (LSIA)",
+                imagePath: "/charts/lsia.png"
+              },
+              {
+                title: "Sandy Shores Airfield",
+                imagePath: "/charts/sandy_shores.png"
+              },
+              {
+                title: "McKenzie Field",
+                imagePath: "/charts/mckenzie.png"
+              }
+            ],
+            emotes: []
           }
         ]
       }
