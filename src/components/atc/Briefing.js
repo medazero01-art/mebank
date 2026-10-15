@@ -23,7 +23,7 @@ const COVER = { clear: "SKC", few: "FEW", scattered: "SCT", broken: "BKN", overc
 const signed = (n) => `${n >= 0 ? "+" : "−"}${Math.abs(n).toFixed(0)}`;
 
 // METAR-like line: "KLSI 23203KT 9999 FEW030 20/"
-function metar(icao, w) {
+export function metar(icao, w) {
   const wind = w.windSpeed <= 2 ? "00000KT" : `${String(w.windDirection).padStart(3, "0")}${String(w.windSpeed).padStart(2, "0")}KT`;
   const vis = w.visibility >= 10000 ? "9999" : String(w.visibility).padStart(4, "0");
   const cover = COVER[w.cloudCover] || String(w.cloudCover || "").toUpperCase();

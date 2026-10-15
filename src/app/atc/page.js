@@ -20,11 +20,14 @@ import ReadbackPanel from "@/components/atc/ReadbackPanel";
 import EmergencyPanel from "@/components/atc/EmergencyPanel";
 import MfdPanel from "@/components/atc/MfdPanel";
 import AtcFeed from "@/components/atc/AtcFeed";
+import PreflightDialog from "@/components/atc/PreflightDialog";
 
 const isTyping = (el) => el && (el.tagName === "INPUT" || el.tagName === "TEXTAREA" || el.isContentEditable);
 // A controller message older than this is history, not something to read back now.
 const AUTO_READBACK_MAX_AGE_MS = 10 * 60 * 1000;
 const CHARTS_KEY = "atc-assistant:charts:v1";
+// Set once the preflight is done: the dialog comes back with the next browser session, not on reload.
+const PREFLIGHT_KEY = "atc-assistant:preflight-done";
 const OUTBOUND_PHASES = ["clearance", "ground", "departure"];
 
 function readJson(key) {
@@ -49,6 +52,7 @@ export default function AtcPage() {
   const [hydrated, setHydrated] = useState(false);
   const [emergency, setEmergency] = useState(null);
   const [incoming, setIncoming] = useState(null);
+  const [preflight, setPreflight] = useState(false);
   const autoReadbackId = useRef(null);
   const { copiedKey, copy } = useCopy();
   const saaa = useSaaaBriefing();
@@ -57,8 +61,38 @@ export default function AtcPage() {
   useEffect(() => {
     setFlight(restoreFlight(readJson(STORAGE_KEY)));
     setChartCal(readJson(CHARTS_KEY) || {});
+    let done = false;
+    try {
+      done = sessionStorage.getItem(PREFLIGHT_KEY) === "1";
+    } catch {
+      // Session storage blocked: ask every time, it is only one dialog.
+    }
+    setPreflight(!done);
     setHydrated(true);
   }, []);
+
+  const closePreflight = useCallback(() => {
+    try {
+      sessionStorage.setItem(PREFLIGHT_KEY, "1");
+    } catch {
+      // See above.
+    }
+    setPreflight(false);
+  }, []);
+
+  // A fresh flight from the preflight answers. Spots and runways used elsewhere are kept for next time.
+  const startFlight = (draft) => {
+    const { spot, runway, arrSpot, arrRunway, ...plan } = draft;
+    setFlight((f) => {
+      const next = newFlight({ ...f, ...plan });
+      return {
+        ...next,
+        spots: { ...f.spots, [plan.arr]: arrSpot || f.spots[plan.arr], [plan.dep]: spot || f.spots[plan.dep] },
+        runways: { ...f.runways, [plan.arr]: arrRunway || f.runways[plan.arr], [plan.dep]: runway },
+      };
+    });
+    closePreflight();
+  };
 
   useEffect(() => {
     if (hydrated) writeJson(STORAGE_KEY, flight);
@@ -154,7 +188,7 @@ export default function AtcPage() {
   // Number keys copy the matching call when no field is focused.
   useEffect(() => {
     const onKey = (e) => {
-      if (emergency || isTyping(document.activeElement) || e.ctrlKey || e.metaKey || e.altKey) return;
+      if (emergency || preflight || isTyping(document.activeElement) || e.ctrlKey || e.metaKey || e.altKey) return;
       const n = Number(e.key);
       if (!n) return;
       const call = calls[n - 1];
@@ -165,7 +199,7 @@ export default function AtcPage() {
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [calls, copyCall, emergency]);
+  }, [calls, copyCall, emergency, preflight]);
 
   const pickRunway = (icao, rwy) => update({ runways: { ...flight.runways, [icao]: rwy } });
 
@@ -287,6 +321,7 @@ export default function AtcPage() {
         </div>
       </main>
 
+      {hydrated && preflight && <PreflightDialog flight={flight} saaaData={saaa.data} onStart={startFlight} onResume={closePreflight} />}
       {emergency && (
         <EmergencyPanel key={emergency} kind={emergency} flight={flight} update={update} copiedKey={copiedKey} copy={copy} onClose={() => setEmergency(null)} />
       )}

@@ -6,17 +6,19 @@ import { describeAircraft, groundSpeedKt, isOwnAircraft } from "@/lib/atc/radar"
 // Polls our /api/radar (never radar.gta.world directly) as gently as possible:
 // - only one tab polls (Web Locks); other tabs get the data over a BroadcastChannel,
 // - paused while the tab is hidden, never two requests at once,
-// - 5s while flying, 20s when our aircraft is parked or not on the radar,
+// - 2s while moving (the radar moves each aircraft every 5s: polling at 2s shows each
+//   update within ~2s; the MFD animates in between), 4s parked, 5s when we're not on it,
 // - after errors the delay doubles up to 60s.
 const LOCK_NAME = "atc-assistant-radar";
-const FLYING_MS = 5000;
-const IDLE_MS = 20000;
+const MOVING_MS = 2000;
+const PARKED_MS = 4000;
+const NOT_FOUND_MS = 5000;
 const MAX_BACKOFF_MS = 60000;
 
 function nextDelay(own) {
-  if (!own) return IDLE_MS;
+  if (!own) return NOT_FOUND_MS;
   const parked = !own.airborne && (own.speedKt ?? 0) < 5;
-  return parked ? IDLE_MS : FLYING_MS;
+  return parked ? PARKED_MS : MOVING_MS;
 }
 
 export function useRadar({ enabled, ids }) {
@@ -80,7 +82,7 @@ export function useRadar({ enabled, ids }) {
         setStatus({ role: "leader", error: json.errors?.aircraft || null, delayMs: delay });
       } catch (err) {
         failures += 1;
-        delay = Math.min(10000 * 2 ** (failures - 1), MAX_BACKOFF_MS);
+        delay = Math.min(5000 * 2 ** (failures - 1), MAX_BACKOFF_MS);
         setStatus({ role: "leader", error: err.message, delayMs: delay });
       } finally {
         inFlight = false;

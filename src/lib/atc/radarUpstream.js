@@ -1,5 +1,6 @@
 // Server-only. Reads radar.gta.world for every visitor at once:
-// - one upstream request per feed per TTL window, shared by all callers of this instance,
+// - one upstream request per feed per TTL window, shared by all callers of this instance
+//   (aircraft move every 5s upstream, so a 2s window shows each move within ~2s),
 // - concurrent callers wait for the same in-flight request instead of starting another,
 // - after a failure we wait ERROR_BACKOFF_MS before trying again and serve the last good data.
 // The route also sets s-maxage so Vercel's CDN absorbs most polls before they reach us.
@@ -7,7 +8,6 @@
 const BASE_URL = "https://radar.gta.world/api";
 const SITE = process.env.VERCEL_PROJECT_PRODUCTION_URL;
 const USER_AGENT = `atc-assistant/1.0${SITE ? ` (+https://${SITE})` : ""}`;
-export const TTL_MS = 4000;
 const ERROR_BACKOFF_MS = 15000;
 const TIMEOUT_MS = 6000;
 
@@ -17,6 +17,7 @@ const ATC_LINE = /^\[(\d{2}:\d{2}:\d{2})\]\s*\[CH:\s*ATC\]\s*(.+?)\s*(?:\(\d+\))
 const FEEDS = {
   aircraft: {
     path: "/aircraft",
+    ttlMs: 2000,
     normalize: (json) => {
       const serverTime = Date.parse(String(json.timestamp).replace(" ", "T"));
       return (json.data || []).map((a) => {
@@ -38,6 +39,7 @@ const FEEDS = {
   },
   atc: {
     path: "/discord",
+    ttlMs: 3000,
     normalize: (json) =>
       (json.messages || []).map((m) => {
         const match = String(m.content).match(ATC_LINE);
@@ -91,7 +93,7 @@ async function refresh(key) {
 export async function getFeed(key) {
   const entry = state[key];
   const now = Date.now();
-  const fresh = entry.data && now - entry.at < TTL_MS;
+  const fresh = entry.data && now - entry.at < FEEDS[key].ttlMs;
   const backingOff = entry.errorAt && now - entry.errorAt < ERROR_BACKOFF_MS;
   if (!fresh && !backingOff) {
     entry.pending ??= refresh(key).finally(() => {

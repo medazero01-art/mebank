@@ -1,11 +1,12 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { AIRPORTS } from "@/lib/atc/airports";
 import { GTA_MAP, mapWorldBounds, worldToChart } from "@/lib/atc/geo";
 import { TAXI } from "@/lib/atc/taxi";
 import { bearing, cardinal, distance, formatNm } from "@/lib/atc/radar";
 import { restrictedBoxes, strictMsaBoxes } from "@/lib/atc/airspace";
+import { createMotionTracker } from "@/lib/atc/motion";
 import { ChipGroup, Panel, softkeyClass } from "./ui";
 
 const M_PER_NM = 1852;
@@ -16,6 +17,8 @@ const STALE_S = 60;
 const MAP_BOUNDS = mapWorldBounds();
 // Rounded so the server render and the browser agree to the decimal (no hydration mismatch).
 const r1 = (n) => Math.round(n * 10) / 10;
+// Layout effects warn during the server render; there is nothing to paint there anyway.
+const useIsomorphicLayoutEffect = typeof window === "undefined" ? useEffect : useLayoutEffect;
 const MAP_FILTERS = { dim: "brightness(0.42) saturate(0.55) contrast(1.1)", bright: "brightness(0.85) saturate(0.9)" };
 
 // Aircraft symbol pointing up, rotated by heading.
@@ -24,16 +27,47 @@ const planePath = (s) =>
 
 /* ------------------------------------------------------------------ MAP page */
 
-function MapPage({ flight, update, own, traffic, center, rangeNm, setRangeNm }) {
+// Calls `paint(now)` on every animation frame while mounted, and once right after each render.
+function useFramePainter(paint) {
+  const paintRef = useRef(paint);
+  paintRef.current = paint;
+  useIsomorphicLayoutEffect(() => paintRef.current(performance.now()));
+  useEffect(() => {
+    let raf;
+    const frame = (now) => {
+      paintRef.current(now);
+      raf = requestAnimationFrame(frame);
+    };
+    raf = requestAnimationFrame(frame);
+    return () => cancelAnimationFrame(raf);
+  }, []);
+}
+
+// Everything on the map is drawn in world meters (y flipped for SVG) inside one group that
+// is translated to keep our aircraft centered: animating the view is one attribute per frame.
+function MapPage({ flight, update, own, traffic, center, rangeNm, setRangeNm, tracker }) {
   const r = rangeNm * M_PER_NM;
-  const sx = (x) => x - center.x;
-  const sy = (y) => center.y - y; // SVG y grows downwards, world y grows north
   const fs = r / 17;
+  const worldRef = useRef(null);
+  const ownRef = useRef(null);
+  const trafficRefs = useRef(new Map());
+
+  useFramePainter((now) => {
+    const ownPos = own ? tracker.predict(own.callsign, now) || own : null;
+    const c = ownPos || center;
+    worldRef.current?.setAttribute("transform", `translate(${-c.x} ${c.y})`);
+    if (ownPos) ownRef.current?.setAttribute("transform", `translate(${ownPos.x} ${-ownPos.y}) rotate(${own.heading})`);
+    for (const t of traffic) {
+      const p = tracker.predict(t.callsign, now);
+      if (p) trafficRefs.current.get(t.callsign)?.setAttribute("transform", `translate(${p.x} ${-p.y})`);
+    }
+  });
+
   const box = (b, i, cls, dashed) => (
     <rect
       key={i}
-      x={sx(b.x1)}
-      y={sy(b.y2)}
+      x={b.x1}
+      y={-b.y2}
       width={b.x2 - b.x1}
       height={b.y2 - b.y1}
       className={cls}
@@ -55,20 +89,53 @@ function MapPage({ flight, update, own, traffic, center, rangeNm, setRangeNm }) 
           </radialGradient>
         </defs>
         <g clipPath="url(#mfd-clip)">
-          {flight.mapStyle !== "off" && (
-            <image
-              href={GTA_MAP.src}
-              x={sx(MAP_BOUNDS.left)}
-              y={sy(MAP_BOUNDS.top)}
-              width={MAP_BOUNDS.width}
-              height={MAP_BOUNDS.height}
-              preserveAspectRatio="none"
-              style={{ filter: MAP_FILTERS[flight.mapStyle] }}
-            />
-          )}
+          <g ref={worldRef} transform={`translate(${-center.x} ${center.y})`}>
+            {flight.mapStyle !== "off" && (
+              <image
+                href={GTA_MAP.src}
+                x={MAP_BOUNDS.left}
+                y={-MAP_BOUNDS.top}
+                width={MAP_BOUNDS.width}
+                height={MAP_BOUNDS.height}
+                preserveAspectRatio="none"
+                style={{ filter: MAP_FILTERS[flight.mapStyle] }}
+              />
+            )}
+            {RESTRICTED.map((b, i) => box(b, `r${i}`, "fill-av-red/20 stroke-av-red"))}
+            {STRICT_MSA.map((b, i) => box(b, `m${i}`, "fill-av-amber/5 stroke-av-amber/70", true))}
+            {Object.values(AIRPORTS).map((a) => (
+              <g key={a.icao} transform={`translate(${a.position.x} ${-a.position.y})`}>
+                <circle r={r / 45} className="fill-none stroke-av-cyan" strokeWidth={2} vectorEffect="non-scaling-stroke" />
+                <text y={-r / 30} fontSize={fs} textAnchor="middle" className="fill-av-cyan font-avmono font-bold">{a.icao}</text>
+              </g>
+            ))}
+            {traffic.map((t) => {
+              const a = (t.heading * Math.PI) / 180;
+              const len = r / 9;
+              return (
+                <g
+                  key={t.callsign}
+                  ref={(el) => (el ? trafficRefs.current.set(t.callsign, el) : trafficRefs.current.delete(t.callsign))}
+                  transform={`translate(${t.x} ${-t.y})`}
+                  opacity={t.ageS > STALE_S ? 0.4 : 1}
+                >
+                  <line x1={0} y1={0} x2={Math.sin(a) * len} y2={-Math.cos(a) * len} className="stroke-av-green" strokeWidth={1.5} vectorEffect="non-scaling-stroke" />
+                  <path d={`M0 ${-r / 55} L${r / 55} 0 L0 ${r / 55} L${-r / 55} 0 Z`} className="fill-av-green" />
+                  <text x={r / 40} y={-r / 80} fontSize={fs * 0.9} className="fill-av-green font-avmono">{t.callsign}</text>
+                  <text x={r / 40} y={fs * 0.85} fontSize={fs * 0.8} className="fill-av-green/80 font-avmono">
+                    {String(Math.round(t.altFt / 100)).padStart(3, "0")}
+                  </text>
+                </g>
+              );
+            })}
+            {own && (
+              <g ref={ownRef} transform={`translate(${own.x} ${-own.y}) rotate(${own.heading})`}>
+                <line x1={0} y1={0} x2={0} y2={-r} className="stroke-av-magenta/70" strokeDasharray="6 5" vectorEffect="non-scaling-stroke" />
+                <path d={planePath(r / 26)} className="fill-white stroke-black" strokeWidth={1} vectorEffect="non-scaling-stroke" />
+              </g>
+            )}
+          </g>
           <circle cx={0} cy={0} r={r} fill="url(#mfd-vignette)" />
-          {RESTRICTED.map((b, i) => box(b, `r${i}`, "fill-av-red/20 stroke-av-red"))}
-          {STRICT_MSA.map((b, i) => box(b, `m${i}`, "fill-av-amber/5 stroke-av-amber/70", true))}
           {[0.25, 0.5, 0.75, 1].map((f) => (
             <circle key={f} cx={0} cy={0} r={r * f} className="fill-none stroke-av-cyan/25" strokeDasharray={f === 1 ? undefined : "2 4"} vectorEffect="non-scaling-stroke" />
           ))}
@@ -79,32 +146,6 @@ function MapPage({ flight, update, own, traffic, center, rangeNm, setRangeNm }) 
               <line key={i} x1={r1(Math.sin(a) * inner)} y1={r1(-Math.cos(a) * inner)} x2={r1(Math.sin(a) * r)} y2={r1(-Math.cos(a) * r)} className="stroke-av-cyan/50" vectorEffect="non-scaling-stroke" />
             );
           })}
-          {Object.values(AIRPORTS).map((a) => (
-            <g key={a.icao} transform={`translate(${sx(a.position.x)} ${sy(a.position.y)})`}>
-              <circle r={r / 45} className="fill-none stroke-av-cyan" strokeWidth={2} vectorEffect="non-scaling-stroke" />
-              <text y={-r / 30} fontSize={fs} textAnchor="middle" className="fill-av-cyan font-avmono font-bold">{a.icao}</text>
-            </g>
-          ))}
-          {traffic.map((t) => {
-            const a = (t.heading * Math.PI) / 180;
-            const len = r / 9;
-            return (
-              <g key={t.callsign} transform={`translate(${sx(t.x)} ${sy(t.y)})`} opacity={t.ageS > STALE_S ? 0.4 : 1}>
-                <line x1={0} y1={0} x2={Math.sin(a) * len} y2={-Math.cos(a) * len} className="stroke-av-green" strokeWidth={1.5} vectorEffect="non-scaling-stroke" />
-                <path d={`M0 ${-r / 55} L${r / 55} 0 L0 ${r / 55} L${-r / 55} 0 Z`} className="fill-av-green" />
-                <text x={r / 40} y={-r / 80} fontSize={fs * 0.9} className="fill-av-green font-avmono">{t.callsign}</text>
-                <text x={r / 40} y={fs * 0.85} fontSize={fs * 0.8} className="fill-av-green/80 font-avmono">
-                  {String(Math.round(t.altFt / 100)).padStart(3, "0")}
-                </text>
-              </g>
-            );
-          })}
-          {own && (
-            <g transform={`translate(${sx(own.x)} ${sy(own.y)}) rotate(${own.heading})`}>
-              <line x1={0} y1={0} x2={0} y2={-r} className="stroke-av-magenta/70" strokeDasharray="6 5" vectorEffect="non-scaling-stroke" />
-              <path d={planePath(r / 26)} className="fill-white stroke-black" strokeWidth={1} vectorEffect="non-scaling-stroke" />
-            </g>
-          )}
         </g>
         <text x={-r + r / 25} y={-r + fs * 1.1} fontSize={fs} className="fill-av-cyan font-avmono font-bold">N↑</text>
         <text x={r - r / 25} y={-r + fs * 1.1} fontSize={fs} textAnchor="end" className="fill-av-cyan font-avmono">{rangeNm} NM</text>
@@ -130,7 +171,7 @@ function MapPage({ flight, update, own, traffic, center, rangeNm, setRangeNm }) 
 
 /* ---------------------------------------------------------------- CHART page */
 
-function ChartPage({ icao, setIcao, flight, update, own, traffic, route, geo, onCalibrate, onResetCalibration, isCalibrated, saaaData }) {
+function ChartPage({ icao, setIcao, flight, update, own, traffic, route, geo, onCalibrate, onResetCalibration, isCalibrated, saaaData, tracker }) {
   const airport = AIRPORTS[icao];
   const graph = TAXI[icao];
   const full = { x: 0, y: 0, w: geo.width, h: geo.height };
@@ -215,6 +256,21 @@ function ChartPage({ icao, setIcao, flight, update, own, traffic, route, geo, on
   const k = view.w / 60; // marker size relative to the zoom level
   const ownPt = own && own.atAirport?.icao === icao ? worldToChart(geo, own) : null;
   const groundTraffic = traffic.filter((t) => distance(t, airport.position) < 3000).map((t) => ({ ...t, pt: worldToChart(geo, t) }));
+  const ownRef = useRef(null);
+  const trafficRefs = useRef(new Map());
+
+  useFramePainter((now) => {
+    if (ownPt) {
+      const p = worldToChart(geo, tracker.predict(own.callsign, now) || own);
+      ownRef.current?.setAttribute("transform", `translate(${p.x} ${p.y})`);
+    }
+    for (const t of groundTraffic) {
+      const w = tracker.predict(t.callsign, now);
+      if (!w) continue;
+      const p = worldToChart(geo, w);
+      trafficRefs.current.get(t.callsign)?.setAttribute("transform", `translate(${p.x} ${p.y}) rotate(${t.heading})`);
+    }
+  });
   const routeHere = route && route.icao === icao ? route : null;
   const spots = graph ? Object.entries(graph.spots) : [];
   const official = saaaData?.airports.find((a) => a.icao === icao)?.charts || [];
@@ -316,13 +372,18 @@ function ChartPage({ icao, setIcao, flight, update, own, traffic, route, geo, on
         })}
 
         {groundTraffic.map((t) => (
-          <g key={t.callsign} transform={`translate(${t.pt.x} ${t.pt.y}) rotate(${t.heading})`} opacity={t.ageS > STALE_S ? 0.4 : 1}>
+          <g
+            key={t.callsign}
+            ref={(el) => (el ? trafficRefs.current.set(t.callsign, el) : trafficRefs.current.delete(t.callsign))}
+            transform={`translate(${t.pt.x} ${t.pt.y}) rotate(${t.heading})`}
+            opacity={t.ageS > STALE_S ? 0.4 : 1}
+          >
             <path d={planePath(k * 1.4)} className="fill-av-green stroke-black" strokeWidth={k * 0.1} />
           </g>
         ))}
 
         {ownPt && (
-          <g transform={`translate(${ownPt.x} ${ownPt.y})`}>
+          <g ref={ownRef} transform={`translate(${ownPt.x} ${ownPt.y})`}>
             <circle r={k * 3} className="fill-white/10 stroke-white" strokeWidth={k * 0.12} strokeDasharray={`${k * 0.5} ${k * 0.4}`} />
             <g transform={`rotate(${own.heading})`}>
               <path d={planePath(k * 1.8)} className="fill-white stroke-black" strokeWidth={k * 0.15} />
@@ -394,6 +455,10 @@ export default function MfdPanel({ flight, update, radar, own, route, contextIca
   const [rangeNm, setRangeNm] = useState(2);
   const [chartIcao, setChartIcao] = useState(contextIcao);
   const { snapshot, status } = radar;
+  const [tracker] = useState(createMotionTracker);
+  useIsomorphicLayoutEffect(() => {
+    if (snapshot) tracker.ingest(snapshot.aircraft, snapshot.fetchedAt, performance.now());
+  }, [snapshot, tracker]);
 
   // The chart follows the airport we're working with.
   useEffect(() => setChartIcao(contextIcao), [contextIcao]);
@@ -444,7 +509,7 @@ export default function MfdPanel({ flight, update, radar, own, route, contextIca
       </div>
 
       {page === "MAP" ? (
-        <MapPage flight={flight} update={update} own={own} traffic={traffic} center={center} rangeNm={rangeNm} setRangeNm={setRangeNm} />
+        <MapPage flight={flight} update={update} own={own} traffic={traffic} center={center} rangeNm={rangeNm} setRangeNm={setRangeNm} tracker={tracker} />
       ) : (
         <ChartPage
           icao={chartIcao}
@@ -459,6 +524,7 @@ export default function MfdPanel({ flight, update, radar, own, route, contextIca
           onResetCalibration={onResetCalibration}
           isCalibrated={Boolean(calibrated[chartIcao])}
           saaaData={saaaData}
+          tracker={tracker}
         />
       )}
 
