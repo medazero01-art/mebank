@@ -2,6 +2,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
+import Link from "next/link";
 import { RolePlay } from "@/data";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import Timer from "@/components/Timer";
@@ -203,6 +204,17 @@ export default function Home() {
               );
             })}
           </div>
+        </div>
+
+        {/* TOOLS */}
+        <div className="p-3 border-b border-white/10">
+          <Link
+            href="/atc"
+            className="flex items-center justify-between px-3 py-2 rounded-lg border border-white/10 bg-white/5 text-xs font-bold uppercase tracking-wider text-zinc-300 hover:border-[#F5C518]/60 hover:text-[#F5C518] transition-colors"
+          >
+            <span>ATC Assistant</span>
+            <span className="font-mono text-[10px]">→</span>
+          </Link>
         </div>
 
         {/* CATEGORIES & SUBCATEGORIES LIST */}
@@ -422,6 +434,14 @@ export default function Home() {
                   })}
                 </div>
               </div>
+
+              <Link
+                href="/atc"
+                className="flex items-center justify-between px-3 py-2 rounded-lg border border-white/10 bg-white/5 text-xs font-bold uppercase tracking-wider text-zinc-300 hover:text-[#F5C518]"
+              >
+                <span>ATC Assistant</span>
+                <span className="font-mono text-[10px]">→</span>
+              </Link>
 
               {/* Categories */}
               <div className="space-y-2">
